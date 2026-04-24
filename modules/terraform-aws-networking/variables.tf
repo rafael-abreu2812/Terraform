@@ -21,11 +21,22 @@ variable "environment" {
   type        = string
 }
 
+variable "availability_zones" {
+  description = "List of availability zones to use"
+  type        = list(string)
+
+  validation {
+    condition     = length(var.availability_zones) == 2
+    error_message = "Exactly two availability zones must be provided."
+  }
+}
+
 variable "region" {
-  type = string
+  type    = string
   default = "us-east-1"
 }
 
 variable "tags" {
-  type = ob
+  type = map(string)
+  default = {}
 }
