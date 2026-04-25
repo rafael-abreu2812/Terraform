@@ -19,15 +19,15 @@ This module provisions a production-style AWS VPC with:
 flowchart TB
     Internet(["🌐 Internet"])
 
-    Internet <-->|IGW| IGW
+    Internet <-->|"inbound / outbound"| IGW
 
     subgraph VPC["VPC (e.g. 10.0.0.0/16)"]
         IGW["Internet Gateway"]
 
         subgraph AZ1["Availability Zone 1"]
             PubSub1["Public Subnet\n10.0.0.0/24"]
-            PrivSub1["Private Subnet\n10.0.2.0/24"]
             NAT["NAT Gateway\n+ Elastic IP"]
+            PrivSub1["Private Subnet\n10.0.2.0/24"]
         end
 
         subgraph AZ2["Availability Zone 2"]
@@ -35,11 +35,11 @@ flowchart TB
             PrivSub2["Private Subnet\n10.0.3.0/24"]
         end
 
-        IGW --> PubSub1
-        IGW --> PubSub2
+        IGW <-->|"inbound / outbound"| PubSub1
+        IGW <-->|"inbound / outbound"| PubSub2
         PubSub1 --- NAT
-        NAT -->|"outbound only"| PrivSub1
-        NAT -->|"outbound only"| PrivSub2
+        PrivSub1 -->|"outbound only"| NAT
+        PrivSub2 -->|"outbound only"| NAT
     end
 ```
 
