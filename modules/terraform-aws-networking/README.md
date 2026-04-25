@@ -15,6 +15,34 @@ This module provisions a production-style AWS VPC with:
 * Public subnets route traffic to an Internet Gateway
 * Private subnets route outbound traffic through a NAT Gateway
 
+```mermaid
+flowchart TB
+    Internet(["🌐 Internet"])
+
+    Internet <-->|IGW| IGW
+
+    subgraph VPC["VPC (e.g. 10.0.0.0/16)"]
+        IGW["Internet Gateway"]
+
+        subgraph AZ1["Availability Zone 1"]
+            PubSub1["Public Subnet\n10.0.0.0/24"]
+            PrivSub1["Private Subnet\n10.0.2.0/24"]
+            NAT["NAT Gateway\n+ Elastic IP"]
+        end
+
+        subgraph AZ2["Availability Zone 2"]
+            PubSub2["Public Subnet\n10.0.1.0/24"]
+            PrivSub2["Private Subnet\n10.0.3.0/24"]
+        end
+
+        IGW --> PubSub1
+        IGW --> PubSub2
+        PubSub1 --- NAT
+        NAT -->|"outbound only"| PrivSub1
+        NAT -->|"outbound only"| PrivSub2
+    end
+```
+
 ---
 
 ## Usage
