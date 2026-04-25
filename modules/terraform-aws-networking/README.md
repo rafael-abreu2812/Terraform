@@ -83,12 +83,15 @@ module "network" {
 
 ## Outputs
 
-| Name               | Description        |
-| ------------------ | ------------------ |
-| vpc_id             | VPC ID             |
-| public_subnet_ids  | Public subnet IDs  |
-| private_subnet_ids | Private subnet IDs |
-| nat_gateway_id     | NAT Gateway ID     |
+| Name                       | Description                        |
+| -------------------------- | ---------------------------------- |
+| vpc_id                     | ID of the VPC                      |
+| vpc_cidr_block             | CIDR block of the VPC              |
+| public_subnet_ids          | IDs of the public subnets          |
+| public_subnet_cidr_blocks  | CIDR blocks of the public subnets  |
+| private_subnet_ids         | IDs of the private subnets         |
+| private_subnet_cidr_blocks | CIDR blocks of the private subnets |
+| natgateway_id              | ID of the NAT Gateway              |
 
 ---
 
