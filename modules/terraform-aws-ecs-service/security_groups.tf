@@ -54,7 +54,7 @@ resource "aws_security_group" "ecs" {
   )
 }
 
-resource "aws_vpc_security_group_egress_rule" "ecs" {
+resource "aws_vpc_security_group_egress_rule" "ecs" { # Allow all outbound traffic
   security_group_id = aws_security_group.ecs.id
 
   cidr_ipv4   = "0.0.0.0/0"
