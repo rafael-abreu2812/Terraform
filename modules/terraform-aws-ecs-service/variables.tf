@@ -17,6 +17,11 @@ variable "container_insights" {
   type        = bool
 }
 
+variable "acm_certificate_arn" {
+  description = "ARN of the ACM certificate used by the HTTPS listener."
+  type        = string
+}
+
 variable "container_port" {
   description = "Container port for ALB access"
   type = number
@@ -33,3 +38,4 @@ variable "global_tags" {
   type    = map(string)
   default = {}
 }
+
