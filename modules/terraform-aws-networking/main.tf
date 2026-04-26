@@ -15,7 +15,7 @@ resource "aws_vpc" "main" {
   enable_dns_support   = true
   cidr_block = var.vpc_cidr
   tags = merge(
-    var.tags,
+    var.global_tags,
     {
       Name = "${var.project_name}-${var.environment}-vpc"
     }
@@ -35,7 +35,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = merge(
-    var.tags,
+    var.global_tags,
     {
       Name = "${var.project_name}-${var.environment}-public-${tonumber(each.key) + 1}"
     }
@@ -46,7 +46,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = merge(
-    var.tags,
+    var.global_tags,
     {
       Name = "${var.project_name}-${var.environment}-igw"
     }
@@ -57,7 +57,7 @@ resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
   tags = merge(
-    var.tags,
+    var.global_tags,
     {
       Name = "${var.project_name}-${var.environment}-public-rt"
     }
@@ -90,7 +90,7 @@ resource "aws_subnet" "private" {
   availability_zone = var.availability_zones[tonumber(each.key)]
 
   tags = merge(
-    var.tags,
+    var.global_tags,
     {
       Name = "${var.project_name}-${var.environment}-private-${tonumber(each.key) + 1}"
     }
@@ -101,7 +101,7 @@ resource "aws_eip" "nat" {
   domain = "vpc"
 
   tags = merge(
-    var.tags,
+    var.global_tags,
     {
       Name = "${var.project_name}-${var.environment}-nat-eip"
     }
@@ -113,7 +113,7 @@ resource "aws_nat_gateway" "main" {
   subnet_id     = aws_subnet.public["0"].id # Uses the first public subnet created
 
   tags = merge(
-    var.tags,
+    var.global_tags,
     {
       Name = "${var.project_name}-${var.environment}-nat-gateway"
     }
@@ -126,7 +126,7 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
   tags = merge(
-    var.tags,
+    var.global_tags,
     {
       Name = "${var.project_name}-${var.environment}-private-rt"
     }

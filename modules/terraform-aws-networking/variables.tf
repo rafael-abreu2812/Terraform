@@ -36,7 +36,7 @@ variable "region" {
   default = "us-east-1"
 }
 
-variable "tags" {
+variable "global_tags" {
   type    = map(string)
   default = {}
 }
