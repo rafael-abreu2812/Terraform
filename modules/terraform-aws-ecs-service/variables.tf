@@ -8,9 +8,19 @@ variable "environment" {
   type        = string
 }
 
+variable "vpc_id" {
+  type = string
+}
+
 variable "container_insights" {
   description = "Container Insights provides enhanced observability for ECS workloads, use true to enable"
   type        = bool
+}
+
+variable "container_port" {
+  description = "Container port for ALB access"
+  type = number
+  default = 8080
 }
 
 variable "log_retention" {
