@@ -18,7 +18,7 @@ resource "aws_ecs_cluster" "main" {
 }
 
 resource "aws_cloudwatch_log_group" "logs" {
-  name              = "/ecs/application/${var.project_name}-${var.environment}"
+  name              = "/ecs/${var.project_name}-${var.environment}"
   retention_in_days = var.log_retention
 
   tags = merge(
