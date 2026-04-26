@@ -1,5 +1,5 @@
 locals {
-  containerInsights = var.container_insights ? "enabled" : "disabled"
+  container_insights = var.container_insights ? "enabled" : "disabled"
 }
 
 resource "aws_ecs_cluster" "main" {
@@ -7,24 +7,24 @@ resource "aws_ecs_cluster" "main" {
 
   setting {
     name  = "containerInsights"
-    value = local.containerInsights
+    value = local.container_insights
   }
   tags = merge(
     var.global_tags,
     {
-      Environment = var.environment
+      environment = var.environment
     }
   )
 }
 
 resource "aws_cloudwatch_log_group" "logs" {
-  name              = "/ecs/application/${var.project_name}"
+  name              = "/ecs/application/${var.project_name}-${var.environment}"
   retention_in_days = var.log_retention
 
   tags = merge(
     var.global_tags,
     {
-      Environment = var.environment
+      environment = var.environment
     }
   )
 }
