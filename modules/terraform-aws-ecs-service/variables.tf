@@ -22,6 +22,12 @@ variable "acm_certificate_arn" {
   type        = string
 }
 
+variable "health_check_path" {
+  description = "Health check path for the target group."
+  type        = string
+  default     = "/"
+}
+
 variable "container_port" {
   description = "Container port for ALB access"
   type = number
