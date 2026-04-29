@@ -22,10 +22,50 @@ variable "container_insights" {
   type        = bool
 }
 
+
+variable "container_definitions" {
+  description = "Custom ECS container definitions. If null, the module creates a default container definition."
+  type        = any
+  default     = null
+}
+
+variable "container_name" {
+  description = "Name of the container."
+  type        = string
+}
+
+variable "container_image" {
+  description = "Container image to run."
+  type        = string
+}
+
 variable "container_port" {
-  description = "Container port for ALB access"
-  type = number
-  default = 8080
+  description = "Port exposed by the container."
+  type        = number
+  default     = 8080
+}
+
+variable "task_cpu" {
+  description = "CPU units for the ECS task."
+  type        = string
+  default     = "256"
+}
+
+variable "task_memory" {
+  description = "Memory for the ECS task."
+  type        = string
+  default     = "512"
+}
+
+variable "aws_region" {
+  description = "AWS region used by the CloudWatch Logs driver."
+  type        = string
+}
+
+variable "container_definitions" {
+  description = "Custom ECS container definitions. If null, the module creates a default container definition."
+  type        = any
+  default     = null
 }
 
 variable "acm_certificate_arn" {
