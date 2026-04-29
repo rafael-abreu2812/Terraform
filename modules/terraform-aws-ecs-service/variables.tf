@@ -40,6 +40,11 @@ variable "log_retention" {
   default     = 7
 }
 
+variable "public_subnet_ids" {
+  description = "ID of public subnets, which contains a route to internet gateway."
+  type = list(string)
+}
+
 variable "global_tags" {
   type    = map(string)
   default = {}
