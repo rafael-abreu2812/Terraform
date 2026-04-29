@@ -1,4 +1,6 @@
 resource "aws_ecs_service" "main" {
+  depends_on = [ aws_lb_listener.https ]
+
   name            = "${var.project_name}-${var.environment}-service"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.main.arn
@@ -16,10 +18,6 @@ resource "aws_ecs_service" "main" {
     container_name   = var.container_name
     container_port   = var.container_port
   }
-
-  depends_on = [
-    aws_lb_listener.https
-  ]
 
   tags = merge(
     var.global_tags,

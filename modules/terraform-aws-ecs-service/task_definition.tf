@@ -15,7 +15,7 @@ locals {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.logs.name
+          awslogs-group         = "/ecs/${var.project_name}-${var.environment}"
           awslogs-region        = var.aws_region
           awslogs-stream-prefix = "ecs"
         }
