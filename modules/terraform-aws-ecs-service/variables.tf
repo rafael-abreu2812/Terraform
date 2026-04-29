@@ -12,9 +12,20 @@ variable "vpc_id" {
   type = string
 }
 
+variable "public_subnet_ids" {
+  description = "ID of public subnets, which contains a route to internet gateway."
+  type = list(string)
+}
+
 variable "container_insights" {
   description = "Container Insights provides enhanced observability for ECS workloads, use true to enable"
   type        = bool
+}
+
+variable "container_port" {
+  description = "Container port for ALB access"
+  type = number
+  default = 8080
 }
 
 variable "acm_certificate_arn" {
@@ -28,25 +39,13 @@ variable "health_check_path" {
   default     = "/"
 }
 
-variable "container_port" {
-  description = "Container port for ALB access"
-  type = number
-  default = 8080
-}
-
 variable "log_retention" {
   description = "Retention of the logs in CloudWatch Log Group, in days."
   type        = number
   default     = 7
 }
 
-variable "public_subnet_ids" {
-  description = "ID of public subnets, which contains a route to internet gateway."
-  type = list(string)
-}
-
 variable "global_tags" {
   type    = map(string)
   default = {}
 }
-
