@@ -17,6 +17,11 @@ variable "public_subnet_ids" {
   type = list(string)
 }
 
+variable "private_subnet_ids" {
+  description = "List of private subnet IDs where ECS tasks will run."
+  type        = list(string)
+}
+
 variable "container_insights" {
   description = "Container Insights provides enhanced observability for ECS workloads, use true to enable"
   type        = bool
@@ -57,15 +62,15 @@ variable "task_memory" {
   default     = "512"
 }
 
+variable "desired_count" {
+  description = "Number of ECS tasks to run."
+  type        = number
+  default     = 1
+}
+
 variable "aws_region" {
   description = "AWS region used by the CloudWatch Logs driver."
   type        = string
-}
-
-variable "container_definitions" {
-  description = "Custom ECS container definitions. If null, the module creates a default container definition."
-  type        = any
-  default     = null
 }
 
 variable "acm_certificate_arn" {
