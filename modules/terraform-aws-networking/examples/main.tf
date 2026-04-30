@@ -11,7 +11,7 @@ module "network" {
     "us-east-1b"
   ]
 
-  tags = {
+  global_tags = {
     owner = "best-user-of-the-world"
   }
 }
