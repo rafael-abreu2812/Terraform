@@ -1,16 +1,34 @@
+module "network" {
+  source = "../terraform-aws-networking-module"
+
+  vpc_cidr = "10.0.0.0/16"
+
+  project_name = "demo"
+  environment  = "dev"
+
+  availability_zones = [
+    "us-east-1a",
+    "us-east-1b"
+  ]
+
+  tags = {
+    owner = "rafael"
+  }
+}
+
 module "ecs" {
-  source = "../../terraform-aws-ecs-service"
+  source = "../terraform-aws-ecs-service"
 
   # Network
   vpc_id             = module.network.vpc_id
   public_subnet_ids  = module.network.public_subnet_ids
   private_subnet_ids = module.network.private_subnet_ids
-  container_insights = false
+  
 
   # App
   project_name = "demo"
   environment  = "dev"
-
+  container_insights = false
   container_name  = "app"
   container_image = "nginx:latest"
   container_port  = 80
@@ -22,7 +40,7 @@ module "ecs" {
 
   # ALB
   health_check_path    = "/"
-  acm_certificate_arn  = "arn:aws:acm:us-east-1:020262236467:certificate/cba4cc2a-45df-4413-8fd4-0d854591599f"
+  acm_certificate_arn  = "arn:aws:acm:us-east-1:123456789012:certificate/XXXX"
 
   # Logs
   aws_region   = "us-east-1"
