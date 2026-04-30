@@ -1,5 +1,5 @@
 module "network" {
-  source = "../terraform-aws-networking-module"
+  source = "../terraform-aws-networking"
 
   vpc_cidr = "10.0.0.0/16"
 
@@ -11,13 +11,14 @@ module "network" {
     "us-east-1b"
   ]
 
-  tags = {
-    owner = "rafael"
+  global_tags = {
+    owner = "best-user"
   }
 }
 
 module "ecs" {
   source = "../terraform-aws-ecs-service"
+  depends_on = [ module.network ]
 
   # Network
   vpc_id             = module.network.vpc_id
@@ -40,7 +41,7 @@ module "ecs" {
 
   # ALB
   health_check_path    = "/"
-  acm_certificate_arn  = "arn:aws:acm:us-east-1:123456789012:certificate/XXXX"
+  acm_certificate_arn  = "arn:aws:acm:us-east-1:020262236467:certificate/cba4cc2a-45df-4413-8fd4-0d854591599f"
 
   # Logs
   aws_region   = "us-east-1"
