@@ -1,5 +1,5 @@
 resource "aws_ecs_service" "main" {
-  depends_on = [ aws_lb_listener.https ]
+  depends_on = [aws_lb_listener.https]
 
   name            = "${var.project_name}-${var.environment}-service"
   cluster         = aws_ecs_cluster.main.id

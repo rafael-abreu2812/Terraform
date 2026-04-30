@@ -27,3 +27,12 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
   role       = aws_iam_role.ecs_task_execution.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+
+
+resource "aws_iam_role_policy" "ecs_task_execution_extra" {
+  count = var.execution_role_policy_json == null ? 0 : 1
+
+  name   = "${var.project_name}-${var.environment}-ecs-execution-extra-policy"
+  role   = aws_iam_role.ecs_task_execution.id
+  policy = var.execution_role_policy_json
+}

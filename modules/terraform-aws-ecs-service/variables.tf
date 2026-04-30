@@ -14,7 +14,7 @@ variable "vpc_id" {
 
 variable "public_subnet_ids" {
   description = "ID of public subnets, which contains a route to internet gateway."
-  type = list(string)
+  type        = list(string)
 }
 
 variable "private_subnet_ids" {
@@ -26,7 +26,6 @@ variable "container_insights" {
   description = "Container Insights provides enhanced observability for ECS workloads, use true to enable"
   type        = bool
 }
-
 
 variable "container_definitions" {
   description = "Custom ECS container definitions. If null, the module creates a default container definition."
@@ -60,6 +59,12 @@ variable "task_memory" {
   description = "Memory for the ECS task."
   type        = string
   default     = "512"
+}
+
+variable "execution_role_policy_json" {
+  description = "Optional additional IAM policy JSON for the ECS task execution role."
+  type        = string
+  default     = null
 }
 
 variable "desired_count" {
