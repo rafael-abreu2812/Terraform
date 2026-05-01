@@ -1,38 +1,42 @@
-resource "aws_iam_role" "ecs_task_execution" {
-  name = "${var.project_name}-${var.environment}-ecs-execution-role"
+##### IAM
+  #### Role
+    resource "aws_iam_role" "ecs_task_execution" {
+      name = "${var.project_name}-${var.environment}-ecs-execution-role"
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          Service = "ecs-tasks.amazonaws.com"
+      assume_role_policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [
+          {
+            Effect = "Allow"
+            Principal = {
+              Service = "ecs-tasks.amazonaws.com"
+            }
+            Action = "sts:AssumeRole"
+          }
+        ]
+      })
+
+      tags = merge(
+        var.global_tags,
+        {
+          Name        = "${var.project_name}-${var.environment}-ecs-execution-role"
+          environment = var.environment
         }
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
-
-  tags = merge(
-    var.global_tags,
-    {
-      Name        = "${var.project_name}-${var.environment}-ecs-execution-role"
-      environment = var.environment
+      )
     }
-  )
-}
 
-resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
-  role       = aws_iam_role.ecs_task_execution.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
+  #### Policy
+    resource "aws_iam_role_policy" "ecs_task_execution_extra" {
+      count = var.execution_role_policy_json == null ? 0 : 1
 
+      name   = "${var.project_name}-${var.environment}-ecs-execution-extra-policy"
+      role   = aws_iam_role.ecs_task_execution.id
+      policy = var.execution_role_policy_json
+    }
 
-resource "aws_iam_role_policy" "ecs_task_execution_extra" {
-  count = var.execution_role_policy_json == null ? 0 : 1
-
-  name   = "${var.project_name}-${var.environment}-ecs-execution-extra-policy"
-  role   = aws_iam_role.ecs_task_execution.id
-  policy = var.execution_role_policy_json
-}
+  #### Policy Attachment
+    resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
+      role       = aws_iam_role.ecs_task_execution.name
+      policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+    }
+#####
