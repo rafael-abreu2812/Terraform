@@ -41,7 +41,7 @@ module "ecs" {
 
   # ALB
   health_check_path    = "/"
-  acm_certificate_arn  = "arn:aws:acm:us-east-1:020262236467:certificate/cba4cc2a-45df-4413-8fd4-0d854591599f"
+  acm_certificate_arn  = "arn:aws:acm:us-east-1:123456789012:certificate/your-certificate-id"
 
   # Logs
   aws_region   = "us-east-1"

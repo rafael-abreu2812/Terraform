@@ -40,7 +40,7 @@ resource "aws_ecs_task_definition" "main" {
    tags = merge(
       var.global_tags,
       {
-        Name        = "${var.project_name}-${var.environment}-tg"
+        Name        = "${var.project_name}-${var.environment}-task"
         environment = var.environment
       }
    )

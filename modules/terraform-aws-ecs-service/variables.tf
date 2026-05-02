@@ -9,7 +9,8 @@ variable "environment" {
 }
 
 variable "vpc_id" {
-  type = string
+  description = "ID of the VPC where resources will be created."
+  type        = string
 }
 
 variable "public_subnet_ids" {
