@@ -31,11 +31,6 @@ variable "availability_zones" {
   }
 }
 
-variable "region" {
-  type    = string
-  default = "us-east-1"
-}
-
 variable "global_tags" {
   type    = map(string)
   default = {}
