@@ -1,5 +1,22 @@
 # Terraform AWS Networking Module
 
+## 💰 Estimated Monthly Cost (us-east-1)
+
+> Based on default configuration running 24/7. Excludes data transfer charges.
+
+| Resource        | Details                        | Est. Cost/month |
+| --------------- | ------------------------------ | --------------- |
+| NAT Gateway     | 1x, $0.045/h × 730h            | ~$32.85         |
+| Elastic IP      | Attached to NAT (no extra cost)| $0.00           |
+| VPC / Subnets   | No hourly charge               | $0.00           |
+| **Total**       |                                | **~$32.85/mo**  |
+
+> ⚠️ The NAT Gateway is the main cost driver of this module. Data processing fees ($0.045/GB) are additional. For dev/test environments, consider removing the NAT Gateway and using VPC Endpoints instead.
+>
+> Pricing source: [AWS VPC Pricing](https://aws.amazon.com/vpc/pricing/) — May 2026
+
+---
+
 This module provisions a production-style AWS VPC with:
 
 * Public and private subnets

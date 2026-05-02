@@ -1,5 +1,25 @@
 # Terraform AWS ECS Service Module
 
+## 💰 Estimated Monthly Cost (us-east-1)
+
+> Based on default configuration (1 task, 0.25 vCPU, 512 MB) running 24/7. Excludes data transfer and CloudWatch charges.
+
+| Resource                  | Details                                          | Est. Cost/month |
+| ------------------------- | ------------------------------------------------ | --------------- |
+| Application Load Balancer | 1x, $0.0225/h × 730h (+ LCU, low traffic)       | ~$16.43         |
+| Fargate Task (× 1)        | 0.25 vCPU + 0.5 GB, 730h                        | ~$5.65          |
+| ECS Cluster               | No charge for the cluster itself                 | $0.00           |
+| CloudWatch Logs           | Depends on log volume (~$0.50/GB ingested)       | variable        |
+| **Total (baseline)**      |                                                  | **~$22.08/mo**  |
+
+> ⚠️ Costs scale linearly with `desired_count` and task size. A production setup with 2 tasks of 1 vCPU / 2 GB would cost ~$75–$90/mo for compute alone, before ALB and logs.
+>
+> This module requires a VPC with a NAT Gateway (provisioned by [terraform-aws-networking](../terraform-aws-networking)), which adds ~$32.85/mo.
+>
+> Pricing sources: [AWS Fargate Pricing](https://aws.amazon.com/fargate/pricing/), [ELB Pricing](https://aws.amazon.com/elasticloadbalancing/pricing/) — May 2026
+
+---
+
 This module provisions a production-style ECS Fargate service with:
 
 * ECS Cluster with optional Container Insights
