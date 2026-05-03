@@ -1,5 +1,6 @@
 variable "vpc_cidr" {
-  type = string
+  description = "CIDR block for the VPC. Must be a valid IPv4 CIDR between /16 and /24."
+  type        = string
   validation {
     condition = (
       can(cidrsubnet(var.vpc_cidr, 0, 0)) &&

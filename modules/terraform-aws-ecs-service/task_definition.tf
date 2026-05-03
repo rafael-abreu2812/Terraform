@@ -35,7 +35,7 @@ resource "aws_ecs_task_definition" "main" {
   memory                   = var.task_memory
   execution_role_arn       = aws_iam_role.ecs_task_execution.arn
 
-  container_definitions = local.container_definitions
+  container_definitions = jsonencode(local.container_definitions)
 
    tags = merge(
       var.global_tags,
