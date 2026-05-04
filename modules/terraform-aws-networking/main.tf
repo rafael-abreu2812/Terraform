@@ -1,15 +1,18 @@
 locals {
+  az_count = length(var.availability_zones)
+
+  # Dynamically generate public CIDRs (e.g., if 3 AZs: indices 0, 1, 2)
   public_subnet_cidrs = [
-    cidrsubnet(var.vpc_cidr, 8, 0),
-    cidrsubnet(var.vpc_cidr, 8, 1)
+    for i in range(local.az_count) : cidrsubnet(var.vpc_cidr, 8, i)
   ]
 
+  # Dynamically generate private CIDRs (e.g., if 3 AZs: indices 3, 4, 5)
   private_subnet_cidrs = [
-    cidrsubnet(var.vpc_cidr, 8, 2),
-    cidrsubnet(var.vpc_cidr, 8, 3)
+    for i in range(local.az_count) : cidrsubnet(var.vpc_cidr, 8, i + local.az_count)
   ]
 
-  nat_gateway_count = var.single_nat_gateway ? 1 : length(var.availability_zones)
+  # Determine how many NAT Gateways to create
+  nat_gateway_count = var.single_nat_gateway ? 1 : local.az_count
 }
 
 resource "aws_vpc" "main" {
