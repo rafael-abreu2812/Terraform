@@ -32,6 +32,12 @@ variable "availability_zones" {
   }
 }
 
+variable "single_nat_gateway" {
+  description =   "Determines the NAT Gateway deployment strategy. If true, provisions a shared NAT Gateway across all private subnets (cost-optimized). If false, deploys one NAT Gateway per AZ (highly available)"
+  type        = bool
+  default     = true
+}
+
 variable "global_tags" {
   type    = map(string)
   default = {}

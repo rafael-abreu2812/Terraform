@@ -8,6 +8,8 @@ locals {
     cidrsubnet(var.vpc_cidr, 8, 2),
     cidrsubnet(var.vpc_cidr, 8, 3)
   ]
+
+  nat_gateway_count = var.single_nat_gateway ? 1 : length(var.availability_zones)
 }
 
 resource "aws_vpc" "main" {
@@ -98,6 +100,8 @@ resource "aws_subnet" "private" {
 }
 
 resource "aws_eip" "nat" {
+  count = local.nat_gateway_count
+
   domain = "vpc"
 
   tags = merge(
