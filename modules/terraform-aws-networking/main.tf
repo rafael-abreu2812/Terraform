@@ -107,12 +107,14 @@ resource "aws_eip" "nat" {
   tags = merge(
     var.global_tags,
     {
-      Name = "${var.project_name}-${var.environment}-nat-eip"
+      Name = "${var.project_name}-${var.environment}-nat-eip-${count.index + 1}"
     }
   )
 }
 
 resource "aws_nat_gateway" "main" {
+
+
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public["0"].id # Uses the first public subnet created
 
