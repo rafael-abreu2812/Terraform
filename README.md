@@ -1,34 +1,45 @@
-# AWS Terraform Modules
+# 🚀 Production-Grade AWS Terraform Architecture
 
-A collection of production-ready Terraform modules for AWS, designed around real-world scenarios rather than raw resource wrappers.
+![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Active_Development-success?style=for-the-badge)
 
-Each module is opinionated by design — it encapsulates security best practices, naming conventions, and architectural decisions that would otherwise need to be repeated across every project.
+A curated collection of production-ready, highly available Terraform modules for AWS. 
 
----
-
-## Philosophy
-
-Most Terraform modules available publicly are thin wrappers around a single AWS resource. These modules take a different approach:
-
-- **Scenario-driven** — each module solves a real infrastructure problem, not just "create a VPC" or "create an ECS cluster"
-- **Secure by default** — least-privilege IAM, private networking, HTTPS enforcement, and restrictive security groups are built in, not optional
-- **Production conventions** — consistent tagging, environment separation, and naming patterns across all resources
-- **Composable** — modules expose the outputs needed to wire them together, but each module can also be used independently with any existing VPC or infrastructure
+Unlike standard open-source modules that act as thin wrappers around individual AWS resources, these modules are **Architecture-First** and **Opinionated**. They are designed to solve real-world infrastructure scenarios, encapsulating enterprise best practices for Security, FinOps, and High Availability.
 
 ---
 
-## Modules
+## 🧠 Core Philosophy
 
-| Module | Description | Docs |
-| ------ | ----------- | ---- |
-| [terraform-aws-networking](modules/terraform-aws-networking/) | Production VPC with public/private subnets, NAT Gateway, and multi-AZ routing | [README](modules/terraform-aws-networking/README.md) |
-| [terraform-aws-ecs-service](modules/terraform-aws-ecs-service/) | Fargate ECS service with ALB, HTTPS, IAM execution role, and CloudWatch logging | [README](modules/terraform-aws-ecs-service/README.md) |
+This repository demonstrates how to build cloud infrastructure the way top-tier tech companies do:
+
+- **🔐 Secure by Default:** Least-privilege IAM roles, private networking for compute/data layers, and restrictive security groups.
+- **💸 FinOps Aware:** Built-in cost optimization toggles (e.g., single vs. multi-AZ NAT Gateways) so developers can easily switch between cheap dev environments and resilient production environments.
+- **🏗️ Composable & Decoupled:** Modules can be stacked to build a complete platform, or used entirely independently with existing infrastructure.
+- **🏷️ Standardized Operations:** Consistent tagging, naming conventions, and environment isolation.
 
 ---
 
-## Architecture Overview
+## 📦 Module Ecosystem
 
-The modules are designed to be used together. The diagram below shows a typical production deployment using both modules:
+The repository is structured into distinct architectural layers. 
+
+| Layer | Module | Description |
+| :--- | :--- | :--- |
+| **Networking** | [`terraform-aws-networking`](modules/terraform-aws-networking/) | Dynamic VPC, Public/Private Subnets, Multi-AZ routing, and Cost-Optimized NAT Gateways. |
+| **Compute** | [`terraform-aws-ecs-service`](modules/terraform-aws-ecs-service/) | AWS Fargate ECS service with ALB, HTTPS enforcement, and CloudWatch logging. |
+
+### 🗺️ Future Roadmap
+* *Database Layer: Amazon RDS PostgreSQL (Multi-AZ)* ⏳
+* *Caching Layer: Amazon ElastiCache (Redis)* ⏳
+* *Security: AWS WAF & Bastion Host* ⏳
+
+---
+
+## 🏛️ Architecture Overview
+
+When composed together, these modules instantly provision a Well-Architected AWS web application environment. The diagram below illustrates the current standard deployment:
 
 ```mermaid
 flowchart TB
@@ -58,69 +69,3 @@ flowchart TB
     ECS1 --> CW["☁️ CloudWatch Logs"]
     ECS2 --> CW
     NAT -->|"outbound"| Internet(["🌐 Internet"])
-```
-
----
-
-## Usage
-
-The [modules/examples](modules/examples/) directory contains a working example that provisions the full stack — VPC, subnets, NAT Gateway, ECS cluster, Fargate service, ALB, and HTTPS listener — with both modules wired together. Each module can also be used independently by passing the required network variables manually.
-
-```hcl
-module "network" {
-  source = "./modules/terraform-aws-networking"
-
-  vpc_cidr           = "10.0.0.0/16"
-  project_name       = "my-app"
-  environment        = "prod"
-  availability_zones = ["us-east-1a", "us-east-1b"]
-}
-
-module "ecs" {
-  source = "./modules/terraform-aws-ecs-service"
-
-  vpc_id             = module.network.vpc_id
-  public_subnet_ids  = module.network.public_subnet_ids
-  private_subnet_ids = module.network.private_subnet_ids
-
-  project_name        = "my-app"
-  environment         = "prod"
-  container_name      = "app"
-  container_image     = "my-ecr-repo/app:latest"
-  container_port      = 8080
-  acm_certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/your-certificate-id"
-  aws_region          = "us-east-1"
-}
-```
-
----
-
-## 💰 Estimated Monthly Cost
-
-Running both modules together with default settings in `us-east-1`:
-
-| Component           | Cost/month  |
-| ------------------- | ----------- |
-| NAT Gateway         | ~$32.85     |
-| Application LB      | ~$16.43     |
-| Fargate (1 task, 0.25 vCPU / 512 MB) | ~$5.65 |
-| **Total (baseline)**| **~$54.93** |
-
-> Costs scale with traffic, number of tasks, and task size. Data transfer and CloudWatch charges are additional.
-> Pricing based on AWS us-east-1 rates — May 2026.
-
----
-
-## Requirements
-
-| Tool      | Version   |
-| --------- | --------- |
-| Terraform | >= 1.5.0  |
-| AWS Provider | ~> 5.0 |
-
----
-
-## Author
-
-Built as part of a DevOps portfolio focused on production-grade AWS infrastructure.
-Feedback and contributions are welcome.
