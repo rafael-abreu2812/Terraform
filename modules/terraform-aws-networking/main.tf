@@ -116,15 +116,15 @@ resource "aws_eip" "nat" {
 }
 
 resource "aws_nat_gateway" "main" {
+  count         = local.nat_gateway_count
 
-
-  allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.public["0"].id # Uses the first public subnet created
+  allocation_id = aws_eip.nat[count.index].id
+  subnet_id     = aws_subnet.public[tostring(count.index)].id # Uses the first public subnet created
 
   tags = merge(
     var.global_tags,
     {
-      Name = "${var.project_name}-${var.environment}-nat-gateway"
+      Name = "${var.project_name}-${var.environment}-nat-gateway-${count.index + 1}"
     }
   )
 
@@ -132,27 +132,31 @@ resource "aws_nat_gateway" "main" {
 }
 
 resource "aws_route_table" "private" {
+  for_each = aws_subnet.private
+
   vpc_id = aws_vpc.main.id
 
   tags = merge(
     var.global_tags,
     {
-      Name = "${var.project_name}-${var.environment}-private-rt"
+      Name = "${var.project_name}-${var.environment}-private-rt-${tonumber(each.key) + 1}"
     }
   )
 }
 
 resource "aws_route" "private_nat_access" {
-  route_table_id         = aws_route_table.private.id
+  for_each = aws_route_table.private
+
+  route_table_id         = each.value.id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.main.id # Route to the NAT GW in the public subnet
+  nat_gateway_id         = var.single_nat_gateway ? aws_nat_gateway.main[0].id : aws_nat_gateway.main[tonumber(each.key)].id
 }
 
 resource "aws_route_table_association" "private" {
   for_each = aws_subnet.private
 
   subnet_id      = each.value.id
-  route_table_id = aws_route_table.private.id
+  route_table_id = aws_route_table.private[each.key].id
 }
 #####
 

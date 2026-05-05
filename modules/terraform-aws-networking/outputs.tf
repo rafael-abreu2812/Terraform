@@ -28,7 +28,7 @@ output "private_subnet_cidr_blocks" {
   value       = [for subnet in aws_subnet.private : subnet.cidr_block]
 }
 
-output "natgateway_id" {
-  description = "ID of the NAT Gateway"
-  value       = aws_nat_gateway.main.id
+output "nat_gateway_ids" {
+  description = "IDs of the NAT Gateways"
+  value       = aws_nat_gateway.main[*].id 
 }
